@@ -1,11 +1,13 @@
 #include <iostream>
 #include <random>
 
+using namespace std;
+
 class Nodo { public:
     int info;
     Nodo *prox;
 };
-   
+
 class Fila {
     private:
         Nodo *inicio;
@@ -23,31 +25,32 @@ class Fila {
 void Fila::adicionar(int senha) {
     Nodo *aux;
     aux = new Nodo;
-    
+
     if(aux == nullptr) {
         std::cout << "Espaço de memória não alocado!" << std::endl;
         return;
     }
-    
+
     aux -> info = senha;
     aux -> prox = nullptr;
-    
+
     if(inicio == nullptr) {
         inicio = aux;
     } else {
         fim -> prox = aux;
     }
-    
+
     fim = aux;
 }
 
 void Fila::remover() {
     Nodo *aux;
-    
+
     if(inicio == nullptr) {
         std::cout << "Fila vazia!";
+        return;
     }
-    
+
     aux = inicio;
     inicio = inicio -> prox;
     delete aux;
@@ -56,7 +59,7 @@ void Fila::remover() {
 void gerir(Fila &P, Fila &C, int &contP, int &contC) {
     int idade;
     idade = rand() % 100 + 1;
-    
+
     if(idade >= 60) {
         P.adicionar(contP);
         contP++;
@@ -69,30 +72,34 @@ void gerir(Fila &P, Fila &C, int &contP, int &contC) {
 int main() {
     Fila P, C;
     int contC, contP;
-    int contAtender = 0;
-    
-    contC = contP = 1;
-    
+
+    contC = contP = 0;
+
     srand(time(NULL));
-    
-    if(contP % 3 != 0) { // WHILE ENQUANTO TIVER PESSOAS NA FILA E FUNÇÃO PARA ADMINISTRAR REMOÇÃO DE PESSOAS DA FILA?
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    if(contP <= 3 || contC <= 1) {
+
+    // Sessão para adicionar clientes à fila
+    for(int i = 0; i < 10; i++) {
         gerir(P, C, contP, contC);
-    } else {
-        contC = cont P = 1;
     }
-    
+
+    // Sessão para atender clientes
+    while(contC > 0 || contP > 0) {
+        for(int i = 0; i < 3; i++) {
+            if(contP > 0) {
+                cout << "Prioritário atendido" << endl;
+                P.remover();
+                contP--;
+            } else {
+                break;
+            }
+        }
+
+        if(contC > 0) {
+            cout << "Comum atendido" << endl;
+            C.remover();
+            contC--;
+        }
+    }
+
+    return 0;
 }
