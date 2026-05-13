@@ -17,89 +17,89 @@ class Fila {
             inicio = nullptr;
             fim = nullptr;
         }
-        void adicionar(int senha);
+        void inserir(int senha);
         void remover();
-        void imprimir();
 };
 
-void Fila::adicionar(int senha) {
-    Nodo *aux;
-    aux = new Nodo;
-
-    if(aux == nullptr) {
-        std::cout << "Espaço de memória não alocado!" << std::endl;
+void Fila::inserir(int contador) {
+    Nodo *novo = new Nodo;
+    if(novo == nullptr) {exit(1);}
+    
+    novo -> info = contador;
+    novo -> prox = nullptr;
+    
+    if(inicio == nullptr) {
+        inicio = fim = novo;
         return;
     }
-
-    aux -> info = senha;
-    aux -> prox = nullptr;
-
-    if(inicio == nullptr) {
-        inicio = aux;
-    } else {
-        fim -> prox = aux;
-    }
-
-    fim = aux;
+    
+    fim -> prox = novo;
+    fim = novo;
 }
 
 void Fila::remover() {
     Nodo *aux;
-
+    
     if(inicio == nullptr) {
-        std::cout << "Fila vazia!";
         return;
     }
-
+    
     aux = inicio;
     inicio = inicio -> prox;
+    
+    if(inicio == nullptr) {
+        fim = nullptr;
+    }
+    
     delete aux;
+    return;
 }
 
-void gerir(Fila &P, Fila &C, int &contP, int &contC) {
+void gerir(Fila &P, Fila &C, int &contP, int &contC, int &senha) {
     int idade;
     idade = rand() % 100 + 1;
-
+    
     if(idade >= 60) {
-        P.adicionar(contP);
+        P.inserir(contP);
         contP++;
     } else {
-        C.adicionar(contC);
+        C.inserir(contC);
         contC++;
     }
+    
+    senha++;
+    return;
 }
 
 int main() {
+    srand(time(0));
+    
     Fila P, C;
-    int contC, contP;
-
-    contC = contP = 0;
-
-    srand(time(NULL));
-
-    // Sessão para adicionar clientes à fila
-    for(int i = 0; i < 10; i++) {
-        gerir(P, C, contP, contC);
+    int contP, contC;
+    int senha;
+    
+    contP = contC = 0;
+    senha = 0;
+    
+    for(int i = 0; i < 20; i++) {
+        gerir(P, C, contP, contC, senha);
     }
-
-    // Sessão para atender clientes
-    while(contC > 0 || contP > 0) {
+    
+    while(contP > 0 || contC > 0) {
         for(int i = 0; i < 3; i++) {
-            if(contP > 0) {
-                cout << "Prioritário atendido" << endl;
-                P.remover();
-                contP--;
-            } else {
+            if(contP == 0) {
                 break;
             }
+            P.remover();
+            contP--;
         }
-
+        
         if(contC > 0) {
-            cout << "Comum atendido" << endl;
-            C.remover();
             contC--;
         }
     }
-
+    
+    cout << "Senhas geradas: " << senha;
+    
     return 0;
 }
