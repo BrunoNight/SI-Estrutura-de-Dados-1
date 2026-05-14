@@ -80,3 +80,42 @@ void Fila::adicionar(char letra) {
     fim -> prox = novoF;
     fim = novoF;
 }
+
+char Fila::remover() {
+    char letraRem;
+    Nodo *aux;
+    
+    if(inicio == nullptr) {
+        cout << "Fila vazia!" << endl;
+        exit(1);
+    }
+    
+    aux = inicio;
+    letraRem = aux -> info;
+    inicio = aux -> prox;
+    
+    if(inicio == nullptr) {
+        fim = nullptr;
+    }
+    
+    delete aux;
+    return letraRem;
+}
+
+bool palindromo(Pilha &P, Fila &F, string palavra) {
+    for(char c: palavra) {
+        P.adicionar(c); // Última letra a entrar é a primeira a sair
+        F.adicionar(c); // Primeira letra a entrar é a primeira a sair
+    }
+    
+    while(P != nullptr && F != nullptr) {
+        char letraCompP = P.remover();
+        char letraCompF = F.remover();
+        
+        if(letraCompP != letraCompF) {
+            return false;
+        }
+    }
+    
+    return true;
+}
