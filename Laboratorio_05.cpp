@@ -97,3 +97,23 @@ void Frase::retirar() {
     delete remover;
     return;
 }
+
+void Frase::palavraAnt() {
+    if(atual -> ant == nullptr) {
+        cout << "Não há palavra anterior" << endl;
+        return;
+    }
+    
+    atual = atual -> ant;
+    return;
+}
+
+void Frase::palavraPos() {
+    if(atual -> prox == nullptr) {
+        cout << "Não há palavra posterior" << endl;
+        return;
+    }
+    
+    atual = atual -> prox;
+    return;
+}
