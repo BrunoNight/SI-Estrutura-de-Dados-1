@@ -1,0 +1,179 @@
+#include <iostream>
+
+using namespace std;
+
+class NodoS { public:
+    int info;
+    NodoS *prox;
+};
+
+class NodoD { public:
+    int info, cont;
+    NodoD *prox, *ant;
+};
+
+class ListaD; 
+
+class ListaS { public:
+    NodoS *inic;
+    ListaS() {
+        inic = nullptr;
+    }
+    void adicionar(int n);
+    void descompactar(ListaD &LD);
+    void imprimir();
+};
+
+class ListaD { public:
+    NodoD *inic;
+    NodoD *fim;
+    ListaD() {
+        inic = nullptr;
+        fim = nullptr;
+    }
+    void adicionar(int n, int cont);
+    void compactar(ListaS &LS);
+    void imprimir();
+};
+
+void ListaS::adicionar(int n) {
+    NodoS *novoS = new NodoS;
+    if(novoS == nullptr) { exit(1); }
+    novoS -> info = n;
+    novoS -> prox = nullptr;
+    if(inic == nullptr) {
+        inic = novoS;
+        return;
+    }
+    NodoS *atual = inic;
+    while(atual -> prox != nullptr) {
+        atual = atual -> prox;
+    }
+    atual -> prox = novoS;
+    return;
+}
+
+void ListaD::adicionar(int n, int cont) {
+    NodoD *novoD = new NodoD;
+    if(novoD == nullptr) { exit(1); }
+    novoD -> info = n;
+    novoD -> cont = cont;
+    novoD -> prox = nullptr;
+    novoD -> ant = fim;
+    if(inic == nullptr) {
+        inic = novoD;
+    } else {
+        fim -> prox = novoD;
+    }
+    fim = novoD;
+    return;
+}
+
+void ListaD::compactar(ListaS &LS) {
+    if(LS.inic == nullptr) {
+        cout << "Lista simples vazia!" << endl;
+        return;    
+    }
+    inic = nullptr;
+    fim = nullptr;
+    NodoS *atualS = LS.inic;
+    int valorAtual = atualS -> info;
+    int contador = 0;
+    while(atualS != nullptr) {
+        if(atualS -> info == valorAtual) {
+            contador++;
+        } else {
+            NodoD *novoD = new NodoD;
+            if(novoD == nullptr) { exit(1); }
+            novoD -> info = valorAtual;
+            novoD -> cont = contador;
+            novoD -> prox = nullptr;
+            novoD -> ant = fim;
+            if(inic == nullptr) {
+                inic = novoD;
+            } else {
+                fim -> prox = novoD;
+            }
+            fim = novoD;
+            valorAtual = atualS -> info;
+            contador = 1;
+        }
+        atualS = atualS -> prox;
+    }
+    NodoD *ultD = new NodoD;
+    if(ultD == nullptr) { exit(1); }
+    ultD -> info = valorAtual;
+    ultD -> cont = contador;
+    ultD -> prox = nullptr;
+    ultD -> ant = fim;
+    if(inic == nullptr) {
+        inic = ultD;
+    } else {
+        fim -> prox = ultD;
+    }
+    fim = ultD;
+}
+
+void ListaS::descompactar(ListaD &LD) {
+    if(LD.inic == nullptr) {
+        cout << "Lista dupla vazia!" << endl;
+        return;
+    }
+    inic = nullptr;
+    NodoS *novoFim = nullptr;
+    NodoD *atualD = LD.fim;
+    while(atualD != nullptr) {
+        for(int i = 0; i < atualD -> cont; i++) {
+            NodoS *novoS = new NodoS;
+            if(novoS == nullptr) { exit(1); }
+            novoS -> info = atualD -> info;
+            novoS -> prox = nullptr;
+            if(inic == nullptr) {
+                inic = novoS;
+            } else {
+                novoFim -> prox = novoS;
+            }
+            novoFim = novoS;
+        }
+        atualD = atualD -> ant;
+    }
+}
+
+void ListaS::imprimir() {
+    NodoS *atualS = inic;
+    while(atualS != nullptr) {
+        cout << atualS -> info << " ";
+        atualS = atualS -> prox;
+    }
+}
+
+void ListaD::imprimir() {
+    NodoD *atualD = inic;
+    while(atualD != nullptr) {
+        cout << atualD -> info << " " << atualD -> cont << " -> ";
+        atualD = atualD -> prox;
+    }
+}
+
+int main() {
+    ListaS LS;
+    ListaD LD;
+    
+    LS.adicionar(1);
+    LS.adicionar(1);
+    LS.adicionar(0);
+    LS.adicionar(1);
+    LS.adicionar(0);
+    LS.adicionar(0);
+    
+    LS.imprimir();
+    cout << "\n" << endl;
+    LD.compactar(LS);
+    LD.imprimir();
+    cout << "\n" << endl;
+    LS.descompactar(LD); 
+    LS.imprimir();
+    cout << "\n" << endl;
+    
+    return 0;
+}
