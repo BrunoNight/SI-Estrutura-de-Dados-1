@@ -172,18 +172,26 @@ void Lista::imprimir() { // Ok
     return;
 }
 
-void Lista::busca_num(int num) {
+int Lista::busca_num(int num, Nodo *aux) {
     if(inicio == nullptr) {
         cout << "Lista vazia!";
-        return;
+        return 0;
+    }
+
+    if(aux == nullptr) {
+        cout << "Número não encontrado!";
+        return 0;
     }
     
-    Nodo *atual = inicio;
-    
-    if(atual -> info == num) {
+    if(aux -> info == num) {
         cout << "Número encontrado!";
-        return;
+        return 1;
     }
+
+    aux = aux -> prox;
     
-    return(busca_num(int num));
+    return busca_num(num, aux);
+    // Pode ser também:
+    // // Sem o "aux = aux -> prox;"
+    // // Fica "return(num, aux -> prox);"
 }
