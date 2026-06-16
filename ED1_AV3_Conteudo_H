@@ -1,0 +1,45 @@
+// Conteudo.h (Header para Conteúdos)
+
+// 1. Inicialização da inclusão do header de conteúdos
+#ifndef CONTEUDO_H_INCLUDED
+#define CONTEUDO_H_INCLUDED
+
+// 2. Inclusão de bibliotecas existentes
+#include <iostream>
+#include <string>
+
+// 3. Evitar ter que escrever "std" no código várias vezes
+using namespace std;
+
+// 4. Struct para definir conteúdo
+typedef struct Conteudo {
+    int id;
+    string titulo;
+    string tipo;
+    string genero;
+    int ano;
+    int numViews;
+    Conteudo* ant; // Para Lista Dupla
+    Conteudo* prox; // Para Listas Simples e Dupla
+} Conteudo;
+
+// 5. Structs para listagem de conteúdos
+typedef struct ListaSConteudos { // Para Lista Simples
+    Conteudo* inicio = nullptr;
+} ListaSConteudos;
+typedef struct ListaDConteudos { // Para Lista Dupla
+    Conteudo* inicio = nullptr;
+    Conteudo* fim = nullptr;
+} ListaDConteudos;
+
+// 6. Funções que serão executadas no sistema
+// // 6.1. CADASTRAR E REMOVER
+void cadastrarConteudo(ListaSConteudos& listaS, ListaDConteudos& listaD, string titulo, string tipo, string genero, int ano);
+void removerConteudo(ListaSConteudos& listaS, ListaDConteudos& listaD, int id);
+// // 6.2. LISTAGEM
+void listaRecomendados(ListaSConteudos& listaS);
+void listaMaisAssistidos(ListaDConteudos& listaD);
+// // 6.3. ASSISTIR
+void assistirConteudo(ListaSConteudos& listaS, ListaDConteudos& listaD, int id);
+
+#endif
